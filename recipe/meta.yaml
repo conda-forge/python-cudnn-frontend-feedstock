@@ -15,6 +15,7 @@ build:
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   script_env:
     - CUDNN_FRONTEND_LOG_INFO=1
+  string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
   number: 2
   skip: true           # [cuda_compiler_version in (undefined, "None")]
   skip: true           # [not linux]
