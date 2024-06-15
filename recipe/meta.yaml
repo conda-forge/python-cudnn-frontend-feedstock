@@ -8,6 +8,8 @@ package:
 source:
   url: https://github.com/NVIDIA/cudnn-frontend/archive/v{{ version }}.tar.gz
   sha256: cd8c4496ed2cdf07c5cb39b4d305009edbe9fe58e27322fb8d7bb66a662a6229
+  patches:
+    - pyproject_include_headers.patch
 
 build:
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
@@ -40,6 +42,9 @@ test:
     - cudnn
   commands:
     - pip check
+    - python -c "import cudnn; assert cudnn.backend_version() >= 8907"
+    # See if C++ header files are included
+    - ls -lh $PREFIX/lib//python$PY_VER/site-packages/include/*
   requires:
     - pip
 

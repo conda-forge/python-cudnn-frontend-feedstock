@@ -1,0 +1,26 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 0f10f34..9015e1e 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -14,12 +14,16 @@ classifiers = [
+ ]
+
+ [tool.setuptools]
+-packages = ["cudnn"]
+-package-dir = {"" = "python"}
++packages = ["cudnn", "include"]
++package-dir = {"" = "python", "include" = "include"}
++include-package-data = true
+
+ [project.urls]
+ "Homepage" = "https://github.com/nvidia/cudnn-frontend"
+ "Bug Tracker" = "https://github.com/nvidia/cudnn-frontend/issues"
+
+ [tool.setuptools.dynamic]
+-version = {attr = "cudnn.__version__"}
+\ No newline at end of file
++version = {attr = "cudnn.__version__"}
++
++[tool.setuptools.package-data]
++include = ["**/*"]
+\ No newline at end of file
