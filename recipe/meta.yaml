@@ -13,6 +13,7 @@ build:
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   script_env:
     - CUDNN_FRONTEND_LOG_INFO=1
+  string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
   number: 0
   skip: true  # [cuda_compiler_version in (undefined, "None")]
   skip: true  # [not linux]
@@ -40,6 +41,9 @@ test:
     - cudnn
   commands:
     - pip check
+    - python -c "import cudnn; assert cudnn.backend_version() >= 8907"
+    # See if C++ header files are included
+    - ls -lh $PREFIX/lib//python$PY_VER/site-packages/include/*
   requires:
     - pip
 
