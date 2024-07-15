@@ -43,7 +43,7 @@ test:
     - pip check
     - python -c "import cudnn; assert cudnn.backend_version() >= 8907"
     # See if C++ header files are included
-    - ls -lh $PREFIX/lib//python$PY_VER/site-packages/include/*
+    - ls -lh $PREFIX/lib/python$PY_VER/site-packages/include/*
   requires:
     - pip
 
