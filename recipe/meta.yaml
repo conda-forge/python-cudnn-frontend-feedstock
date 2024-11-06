@@ -1,5 +1,5 @@
 {% set name = "python-cudnn-frontend" %}
-{% set version = "1.6.1" %}
+{% set version = "1.7.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/NVIDIA/cudnn-frontend/archive/v{{ version }}.tar.gz
-  sha256: 22e9475b4e3c1a87ce81548d13019719fa55257575866724a35fede6de827c8b
+  sha256: e0068757f825bfaff85eaa6f8e0b69c724658d21c8d12ace9c8c0c5734d48290
 
 build:
   script:
