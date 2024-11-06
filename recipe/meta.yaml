@@ -10,7 +10,12 @@ source:
   sha256: 4c7e0e53334f8251807b01287801e5021f904f6200df711a3109489f2589de9a
 
 build:
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  script:
+    # Fix for pybind build error https://github.com/pybind/pybind11/issues/5224
+    - export CFLAGS="-Wno-array-bounds -Wno-stringop-overread"
+    - export CCFLAGS="-Wno-array-bounds -Wno-stringop-overread"
+    - export CXXFLAGS="-Wno-array-bounds -Wno-stringop-overread"
+    - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   script_env:
     - CUDNN_FRONTEND_LOG_INFO=1
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
