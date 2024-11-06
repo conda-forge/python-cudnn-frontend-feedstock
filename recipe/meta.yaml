@@ -1,5 +1,5 @@
 {% set name = "python-cudnn-frontend" %}
-{% set version = "1.5.2" %}
+{% set version = "1.6.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,10 +7,15 @@ package:
 
 source:
   url: https://github.com/NVIDIA/cudnn-frontend/archive/v{{ version }}.tar.gz
-  sha256: 4c7e0e53334f8251807b01287801e5021f904f6200df711a3109489f2589de9a
+  sha256: 22e9475b4e3c1a87ce81548d13019719fa55257575866724a35fede6de827c8b
 
 build:
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  script:
+    # Fix for pybind build error https://github.com/pybind/pybind11/issues/5224
+    - export CFLAGS="-Wno-array-bounds -Wno-stringop-overread"
+    - export CCFLAGS="-Wno-array-bounds -Wno-stringop-overread"
+    - export CXXFLAGS="-Wno-array-bounds -Wno-stringop-overread"
+    - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   script_env:
     - CUDNN_FRONTEND_LOG_INFO=1
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
@@ -41,7 +46,7 @@ test:
     - cudnn
   commands:
     - pip check
-    - python -c "import cudnn; assert cudnn.backend_version() >= 8907"
+    - python -c "import cudnn; assert cudnn.backend_version() >= 90300"
     # See if C++ header files are included
     - ls -lh $PREFIX/lib/python$PY_VER/site-packages/include/*
   requires:
