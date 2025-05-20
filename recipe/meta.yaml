@@ -49,6 +49,7 @@ test:
     - python -c "import cudnn; assert cudnn.backend_version() >= 90300"
     # See if C++ header files are included
     - ls -lh $PREFIX/lib/python$PY_VER/site-packages/include/*
+    - test -f $PREFIX/lib/python$PY_VER/site-packages/include/cudnn_frontend.h
   requires:
     - pip
 
