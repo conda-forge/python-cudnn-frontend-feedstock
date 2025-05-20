@@ -1,5 +1,5 @@
 {% set name = "python-cudnn-frontend" %}
-{% set version = "1.11.0" %}
+{% set version = "1.12.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/NVIDIA/cudnn-frontend/archive/v{{ version }}.tar.gz
-  sha256: de723e07582603721c97dd4fd82bbad0020fa830d1d1eee6269ebf6950ed3128
+  sha256: a0651e01a805063c17cc6251fe88e04529207184ed8909b7cb2dc264332b6388
 
 build:
   script:
@@ -29,7 +29,7 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ compiler('cuda') }}
     - {{ stdlib("c") }}
-    - cmake >=3.17
+    - cmake >=3.18
     - make
     - ninja
   host:
@@ -49,6 +49,7 @@ test:
     - python -c "import cudnn; assert cudnn.backend_version() >= 90300"
     # See if C++ header files are included
     - ls -lh $PREFIX/lib/python$PY_VER/site-packages/include/*
+    - test -f $PREFIX/lib/python$PY_VER/site-packages/include/cudnn_frontend.h
   requires:
     - pip
 
