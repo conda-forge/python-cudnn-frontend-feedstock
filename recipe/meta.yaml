@@ -19,7 +19,7 @@ build:
   script_env:
     - CUDNN_FRONTEND_LOG_INFO=1
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
-  number: 0
+  number: 1
   skip: true  # [cuda_compiler_version in (undefined, "None")]
   skip: true  # [not linux]
 
