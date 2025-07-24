@@ -1,5 +1,5 @@
 {% set name = "python-cudnn-frontend" %}
-{% set version = "1.12.1" %}
+{% set version = "1.13.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/NVIDIA/cudnn-frontend/archive/v{{ version }}.tar.gz
-  sha256: 93025436f48a69e91a6be8442457e574ac23d4fa2995b3b689adcdd758a2b195
+  sha256: 165eaf8bf57998691a48972c3b1785aa96cb9f79325094159bf24914ef512244
 
 build:
   script:
@@ -20,8 +20,7 @@ build:
     - CUDNN_FRONTEND_LOG_INFO=1
   string: cuda{{ cuda_compiler_version | replace('.', '') }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
   number: 0
-  skip: true  # [cuda_compiler_version in (undefined, "None")]
-  skip: true  # [not linux]
+  skip: true  # [cuda_compiler_version in (undefined, "None") or (not linux)]
 
 requirements:
   build:
