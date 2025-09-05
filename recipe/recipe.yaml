@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: python-cudnn-frontend
-  version: 1.14.0
+  version: "1.14.1"
 
 package:
   name: ${{ name|lower }}
@@ -10,7 +10,7 @@ package:
 
 source:
   url: https://github.com/NVIDIA/cudnn-frontend/archive/v${{ version }}.tar.gz
-  sha256: f5a80a133a4f0b63b48575c4e95bfb8812f8874235b783c66d1fc9b65e4123e3
+  sha256: 29de176ec46ed4bdf1d2204d28016233fb009a0c64e83e07e9aabc2fb32be5d8
 
 build:
   number: 0
