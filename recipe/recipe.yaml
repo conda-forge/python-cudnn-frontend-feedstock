@@ -20,9 +20,6 @@ build:
     env:
       CUDNN_FRONTEND_LOG_INFO: "1"
     content:
-      - export CFLAGS="-Wno-array-bounds -Wno-stringop-overread"
-      - export CCFLAGS="-Wno-array-bounds -Wno-stringop-overread"
-      - export CXXFLAGS="-Wno-array-bounds -Wno-stringop-overread"
       - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
