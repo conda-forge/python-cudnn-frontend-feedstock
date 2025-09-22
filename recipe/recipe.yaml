@@ -49,7 +49,7 @@ tests:
       run:
         - pip
     script:
-      - python -c "import cudnn; assert cudnn.backend_version() >= 90300"
+      - python -c "import cudnn; assert cudnn.backend_version() >= 91300"
 
       # PY_VER is not available in 'tests' section with rattler-build
       - export PY_VER=$(python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
