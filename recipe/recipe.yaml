@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: python-cudnn-frontend
-  version: "1.14.1"
+  version: "1.15.0"
 
 package:
   name: ${{ name|lower }}
@@ -10,10 +10,10 @@ package:
 
 source:
   url: https://github.com/NVIDIA/cudnn-frontend/archive/v${{ version }}.tar.gz
-  sha256: 29de176ec46ed4bdf1d2204d28016233fb009a0c64e83e07e9aabc2fb32be5d8
+  sha256: 531f6f0de5f86737e97a3441b073d83d56d89cad39fd9fe81b35d489cc3bc8fe
 
 build:
-  number: 2
+  number: 0
   string: cuda${{ cuda_compiler_version | replace('.', '') }}py${{ CONDA_PY }}h${{ PKG_HASH }}_${{ PKG_BUILDNUM }}
   skip: cuda_compiler_version in (undefined, "None") or (not linux)
   script:
