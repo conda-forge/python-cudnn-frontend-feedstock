@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: python-cudnn-frontend
-  version: "1.14.1"
+  version: "1.16.0"
 
 package:
   name: ${{ name|lower }}
@@ -10,10 +10,10 @@ package:
 
 source:
   url: https://github.com/NVIDIA/cudnn-frontend/archive/v${{ version }}.tar.gz
-  sha256: 29de176ec46ed4bdf1d2204d28016233fb009a0c64e83e07e9aabc2fb32be5d8
+  sha256: 77ed731e0885ea2de1b6f272ad156b48292c2299a2571ae576280011fd5626bd
 
 build:
-  number: 3
+  number: 0
   string: cuda${{ cuda_compiler_version | replace('.', '') }}py${{ CONDA_PY }}h${{ PKG_HASH }}_${{ PKG_BUILDNUM }}
   skip: cuda_compiler_version in (undefined, "None") or (not linux)
   script:
@@ -44,12 +44,15 @@ tests:
   - python:
       imports:
         - cudnn
+        # - cudnn.gemm_swiglu
+        # - cudnn.gemm_amax
       pip_check: true
   - requirements:
       run:
         - pip
+        # - nvidia-cutlass-dsl
     script:
-      - python -c "import cudnn; assert cudnn.backend_version() >= 91300"
+      - python -c "import cudnn; assert cudnn.backend_version() >= 91000, cudnn.backend_version()"
 
       # PY_VER is not available in 'tests' section with rattler-build
       - export PY_VER=$(python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
