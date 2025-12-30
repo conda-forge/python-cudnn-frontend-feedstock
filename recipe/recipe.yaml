@@ -1,11 +1,11 @@
 schema_version: 1
 
 context:
-  name: python-cudnn-frontend
+  build_number: 1
   version: "1.17.0"
 
 package:
-  name: ${{ name|lower }}
+  name: python-cudnn-frontend
   version: ${{ version }}
 
 source:
@@ -13,8 +13,8 @@ source:
   sha256: 08930ae85aba1db1d2d164b8425649199562f89dda8ad25d79bfd0d0bbaab72c
 
 build:
-  number: 0
-  string: cuda${{ cuda_compiler_version | replace('.', '') }}py${{ CONDA_PY }}h${{ PKG_HASH }}_${{ PKG_BUILDNUM }}
+  number: ${{ build_number }}
+  string: cuda${{ cuda_compiler_version | replace('.', '') }}py${{ python | version_to_buildstring }}h${{ hash }}_${{ build_number }}
   skip: cuda_compiler_version in (undefined, "None") or (not linux)
   script:
     env:
