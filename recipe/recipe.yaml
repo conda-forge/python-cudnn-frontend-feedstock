@@ -14,7 +14,7 @@ source:
 
 build:
   number: ${{ build_number }}
-  string: cuda${{ cuda_compiler_version | replace('.', '') }}py${{ python | version_to_buildstring }}h${{ hash }}_${{ build_number }}
+  string: cuda${{ cuda_compiler_version | replace('.', '') }}_py${{ python | version_to_buildstring }}_h${{ hash }}_${{ build_number }}
   skip: cuda_compiler_version in (undefined, "None") or (not linux)
   script:
     env:
