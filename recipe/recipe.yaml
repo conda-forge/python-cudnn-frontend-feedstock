@@ -1,8 +1,8 @@
 schema_version: 1
 
 context:
-  build_number: 1
-  version: "1.17.0"
+  build_number: 0
+  version: "1.18.0"
 
 package:
   name: python-cudnn-frontend
@@ -10,7 +10,7 @@ package:
 
 source:
   url: https://github.com/NVIDIA/cudnn-frontend/archive/v${{ version }}.tar.gz
-  sha256: 08930ae85aba1db1d2d164b8425649199562f89dda8ad25d79bfd0d0bbaab72c
+  sha256: 122dde9e9ee37cc05d626097b3c85d507be0db3f73ee196baa5a034069460517
 
 build:
   number: ${{ build_number }}
@@ -46,7 +46,10 @@ tests:
         - cudnn
         # - cudnn.gemm_swiglu
         # - cudnn.gemm_amax
+        # - cudnn.grouped_gemm
+        # - cudnn.grouped_gemm.grouped_gemm_swiglu
         # - cudnn.native_sparse_attention
+        # - cudnn.native_sparse_attention.compression
         # - cudnn.native_sparse_attention.selection
         # - cudnn.native_sparse_attention.sliding_window_attention
         # - cudnn.native_sparse_attention.top_k
@@ -54,7 +57,7 @@ tests:
   - requirements:
       run:
         - pip
-        # - nvidia-cutlass-dsl==4.3.1
+        # - nvidia-cutlass-dsl==4.3.5
     script:
       - python -c "import cudnn; assert cudnn.backend_version() >= 91000, cudnn.backend_version()"
 
