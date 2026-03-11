@@ -29,12 +29,12 @@ requirements:
     - ${{ compiler('cuda') }}
     - ${{ stdlib("c") }}
     - cmake >=3.18
-    - make
-    - ninja
+    - ninja >=1.11.1.1
   host:
+    - cuda-nvrtc-dev
     - cudnn
     - pip
-    - pybind11
+    - pybind11 >=2.13
     - python
     - setuptools >=64
   run:
