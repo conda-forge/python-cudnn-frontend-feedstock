@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   build_number: 0
-  version: "1.18.0"
+  version: "1.19.0"
 
 package:
   name: python-cudnn-frontend
@@ -10,7 +10,7 @@ package:
 
 source:
   url: https://github.com/NVIDIA/cudnn-frontend/archive/v${{ version }}.tar.gz
-  sha256: 122dde9e9ee37cc05d626097b3c85d507be0db3f73ee196baa5a034069460517
+  sha256: 2af48406ea0c77466cb7a4cfe560f71624ef82265843b6b94c01a98967cf0b65
 
 build:
   number: ${{ build_number }}
@@ -30,11 +30,12 @@ requirements:
     - ${{ stdlib("c") }}
     - cmake >=3.18
     - make
-    - ninja
+    - ninja >=1.11.1.1
   host:
+    - cuda-nvrtc-dev
     - cudnn
     - pip
-    - pybind11
+    - pybind11 >=2.13
     - python
     - setuptools >=64
   run:
