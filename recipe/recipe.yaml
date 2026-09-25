@@ -39,8 +39,8 @@ requirements:
     - python
     - setuptools >=64
   run:
-    - python
     - apache-tvm-ffi >=0.1.11
+    - python
     - nvidia-cutlass-dsl >=4.6.2
 tests:
   - python:
@@ -59,7 +59,6 @@ tests:
   - requirements:
       run:
         - pip
-        # - nvidia-cutlass-dsl==4.3.5
     script:
       - python -c "import cudnn; assert cudnn.backend_version() >= 91000, cudnn.backend_version()"
   - package_contents:
