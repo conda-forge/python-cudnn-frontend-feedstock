@@ -1,8 +1,8 @@
 schema_version: 1
 
 context:
-  build_number: 1
-  version: "1.28.0"
+  build_number: 0
+  version: 1.31.0
 
 package:
   name: python-cudnn-frontend
@@ -10,7 +10,7 @@ package:
 
 source:
   url: https://github.com/NVIDIA/cudnn-frontend/archive/v${{ version }}.tar.gz
-  sha256: c4c2be237f282d67abee8141b321eee2930464f8a7b3cecb3c3c59e431afa37f
+  sha256: 130f3e98e3f07defd60bf39b250ae7d96c61ca99443782ce77fd470964fbd899
 
 build:
   number: ${{ build_number }}
@@ -18,7 +18,7 @@ build:
   skip: cuda_compiler_version in (undefined, "None") or (not linux)
   script:
     env:
-      CUDNN_FRONTEND_LOG_INFO: "1"
+      CUDNN_FRONTEND_LOG_INFO: '1'
     content:
       - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
@@ -40,7 +40,8 @@ requirements:
     - setuptools >=64
   run:
     - python
-
+    - apache-tvm-ffi >=0.1.11
+    - nvidia-cutlass-dsl >=4.6.2
 tests:
   - python:
       imports:
