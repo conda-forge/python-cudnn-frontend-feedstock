@@ -15,12 +15,15 @@ source:
 build:
   number: ${{ build_number }}
   string: cuda${{ cuda_compiler_version | replace('.', '') }}_py${{ python | version_to_buildstring }}_h${{ hash }}_${{ build_number }}
-  skip: match(python, '>=3.15') or cuda_compiler_version in (undefined, "None") or (not linux)
+  skip: (is_abi3 and not is_python_min) or cuda_compiler_version in (undefined, "None") or (not linux)
   script:
     env:
       CUDNN_FRONTEND_LOG_INFO: '1'
+      CUDNN_FRONTEND_PYTHON_STABLE_ABI: 'ON'
     content:
       - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  python:
+    version_independent: ${{ is_abi3 }}
 
 requirements:
   build:
@@ -36,11 +39,13 @@ requirements:
     - cudnn
     - nanobind >=3.0.1,<4
     - pip
-    - python
+    - python ${{ python_min }}.*
+    - if: is_abi3
+      then: python-abi3 ${{ python_min }}.*
     - setuptools >=64
   run:
     - apache-tvm-ffi >=0.1.11
-    - python
+    - python >=${{ python_min }}
     - nvidia-cutlass-dsl >=4.8.0
 tests:
   - python:
@@ -66,11 +71,18 @@ tests:
         # - cudnn.ops.fft_causal_conv1d
         - cudnn.sdpa
       pip_check: true
+      python_version:
+        - if: is_abi3
+          then: ${{ python_min }}.*
+        - "*"
   - requirements:
       run:
-        - pip
+        - if: is_abi3
+          then: abi3audit
     script:
       - python -c "import cudnn; assert cudnn.backend_version() >= 92600, cudnn.backend_version()"
+      - if: is_abi3
+        then: abi3audit $SP_DIR/cudnn/_compiled_module.abi3.so -s -v --assume-minimum-abi3 ${{ python_min }}
   - package_contents:
       strict: false
       site_packages:
