@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   build_number: 0
-  version: 1.31.0
+  version: 1.33.0
 
 package:
   name: python-cudnn-frontend
@@ -10,17 +10,20 @@ package:
 
 source:
   url: https://github.com/NVIDIA/cudnn-frontend/archive/v${{ version }}.tar.gz
-  sha256: 130f3e98e3f07defd60bf39b250ae7d96c61ca99443782ce77fd470964fbd899
+  sha256: 135a2c56c91dc6b1eca6a75369a0c8c8a3747da95c099be31b4f2a9788f91ce6
 
 build:
   number: ${{ build_number }}
   string: cuda${{ cuda_compiler_version | replace('.', '') }}_py${{ python | version_to_buildstring }}_h${{ hash }}_${{ build_number }}
-  skip: match(python, '>=3.15') or cuda_compiler_version in (undefined, "None") or (not linux)
+  skip: (is_abi3 and not is_python_min) or cuda_compiler_version in (undefined, "None") or (not linux)
   script:
     env:
       CUDNN_FRONTEND_LOG_INFO: '1'
+      CUDNN_FRONTEND_PYTHON_STABLE_ABI: 'ON'
     content:
       - ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  python:
+    version_independent: ${{ is_abi3 }}
 
 requirements:
   build:
@@ -28,20 +31,22 @@ requirements:
     - ${{ compiler('cxx') }}
     - ${{ compiler('cuda') }}
     - ${{ stdlib("c") }}
-    - cmake >=3.18
+    - cmake >=3.26
     - cuda-nvrtc-dev
     - make
     - ninja >=1.11.1.1
   host:
     - cudnn
+    - nanobind >=3.0.1,<4
     - pip
-    - pybind11 >=2.13,<3
-    - python
+    - python ${{ python_min }}.*
+    - if: is_abi3
+      then: python-abi3 ${{ python_min }}.*
     - setuptools >=64
   run:
     - apache-tvm-ffi >=0.1.11
-    - python
-    - nvidia-cutlass-dsl >=4.6.2
+    - python >=${{ python_min }}
+    - nvidia-cutlass-dsl >=4.8.0
 tests:
   - python:
       imports:
@@ -66,11 +71,18 @@ tests:
         # - cudnn.ops.fft_causal_conv1d
         - cudnn.sdpa
       pip_check: true
+      python_version:
+        - if: is_abi3
+          then: ${{ python_min }}.*
+        - "*"
   - requirements:
       run:
-        - pip
+        - if: is_abi3
+          then: abi3audit
     script:
       - python -c "import cudnn; assert cudnn.backend_version() >= 92600, cudnn.backend_version()"
+      - if: is_abi3
+        then: abi3audit $SP_DIR/cudnn/_compiled_module.abi3.so -s -v --assume-minimum-abi3 ${{ python_min }}
   - package_contents:
       strict: false
       site_packages:
